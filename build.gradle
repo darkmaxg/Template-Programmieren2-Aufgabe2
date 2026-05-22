@@ -3,7 +3,9 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'org.htw.prog2.aufgabe1.HIVDiagnostics'
+application {
+    mainClass = 'org.htw.prog2.aufgabe1.HIVDiagnostics'
+}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -11,6 +13,12 @@ tasks.withType(JavaCompile) {
 
 run {
     args '-m data/HIVMutationPatternsPI.csv -d ProteaseInhibitor -r data/protease_reference.fasta -p data/protease_sequences.fasta'.split(" ")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 group 'org.htw.prog2'
