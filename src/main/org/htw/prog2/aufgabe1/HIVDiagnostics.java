@@ -39,15 +39,34 @@ public class HIVDiagnostics {
         CommandLine cli;
         try {
             cli = parser.parse(options, args);
+            return cli;
         } catch (ParseException e) {
             System.out.println("Error: " + e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("HIVDiagnostics", options);
             return null;
         }
-        return cli;
     }
 
     public static void main(String[] args) {
+        CommandLine cli = parseOptions(args);
+        int mutationNumber = 0;
+        int referenceSeqNumber = 0;
+        int patientSeqNumber = 0;
+        try{
+            MutationPatterns mutationPatterns = new MutationPatterns(cli.getOptionValue("m"));
+            mutationNumber = mutationPatterns.getNumberOfMutations();
+            SeqFile referenceSeqFile = new SeqFile(cli.getOptionValue("r"));
+            referenceSeqNumber = referenceSeqFile.getFirstSequence().length();
+            SeqFile patientSeqFile = new SeqFile(cli.getOptionValue("p"));
+            patientSeqNumber = patientSeqFile.getNumberOfSequences();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("Eingelesene Mutationen: " + mutationNumber);
+        System.out.println("Länge der eingelesenen Referenzsequenz: " + referenceSeqNumber + " Aminosäuren");
+        System.out.println("Anzahl der eingelesenen Patientensequenzen: " + patientSeqNumber);
     }
 }
